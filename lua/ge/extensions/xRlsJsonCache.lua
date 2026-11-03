@@ -1,7 +1,7 @@
 local M = {}
 local logTag = "xRlsJsonCache"
 
-M.version = "0.0.1"
+M.version = "0.0.3"
 
 local buffer = require("string.buffer")
 local clock = os.clockhp or os.clock

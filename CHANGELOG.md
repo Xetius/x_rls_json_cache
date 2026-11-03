@@ -1,5 +1,16 @@
 # Changelog
 
+## 0.0.3 - 2026-11-03
+
+No change to how the cache behaves.
+
+- Renamed the mod to `x_rls_json_cache` and the extension to `xRlsJsonCache`. The console commands are
+  now `xRlsJsonCache.stats()`, `xRlsJsonCache.clear()` and `xRlsJsonCache.setEnabled(bool)`. Remove
+  any older `x_rls_cache_v*.zip` or `xRlsCache_v*.zip` from your mods folder.
+- Release zips are now named `x_rls_json_cache_<version>.zip`.
+- Releases are built and published by GitHub Actions when a version tag is pushed.
+- `build.ps1` also runs under PowerShell 7 on Linux.
+
 ## 0.0.1 - 2026-10-31
 
 First release.
