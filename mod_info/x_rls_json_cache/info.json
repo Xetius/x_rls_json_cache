@@ -1,7 +1,7 @@
 {
   "title": "RLS JSON Cache",
   "tag_line": "Caches vehicle and RLS data files in memory so they are not re-read from disk",
-  "version_string": "0.0.2",
+  "version_string": "0.0.3",
   "username": "Xetius",
   "tagid": "x_rls_json_cache",
   "message": "[b]Xetius\u2019s RLS JSON Cache[\/b]\n\nThis mod keeps frequently re-read JSON files in memory so BeamNG and RLS Career Overhaul stop reading them from disk multiple times.\n\n[b]What it caches[\/b]\n[list]\n[*]Vehicle info files ([i]info*.json[\/i]) and configurations ([i]*.pc[\/i]), which BeamNG re-reads every time it rebuilds its vehicle list (entering garage mode, saving a configuration etc.)\n[*]RLS Street Knights venue files, which RLS re-scans many, many times per session\n[\/list]\n\n[b]Results[\/b]\n[list]\n[*]Vehicle list rebuild: about 2.5 s down to 0.5 s with the cache filled\n[*]RLS Street Knights and vehicle value lookups: about 90% faster\n[*]Memory: about 25 MB with a large mod list\n[\/list]\n\n[b]Safe by design[\/b]\n[list]\n[*]Save files and part (.jbeam) files are never cached\n[*]Every read returns a fresh copy, so nothing can change the cached data\n[*]Entries are dropped when the file is written or changed, and the whole cache clears when mods are enabled or disabled\n[\/list]\n\n[b]Console Commands (GE Lua)[\/b]\n[list]\n[*][i]xRlsJsonCache.stats()[\/i] shows hits, misses and memory use\n[*][i]xRlsJsonCache.setEnabled(false)[\/i] turns caching off\n[*][i]xRlsJsonCache.clear()[\/i] empties the cache\n[\/list]"

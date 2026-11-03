@@ -1,0 +1,53 @@
+name: Release
+
+# Push a tag that is the bare version number, e.g. 0.0.2 or 0.1.0-beta.1 (no "v" prefix).
+on:
+  push:
+    tags:
+      - '[0-9]+.[0-9]+.[0-9]+'
+      - '[0-9]+.[0-9]+.[0-9]+-*'
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: pwsh
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Check tag is a semver version matching info.json
+        run: |
+          $tag = $env:GITHUB_REF_NAME
+          $semver = '^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)(-[0-9A-Za-z-]+(\.[0-9A-Za-z-]+)*)?(\+[0-9A-Za-z-]+(\.[0-9A-Za-z-]+)*)?$'
+          if ($tag -notmatch $semver) { throw "Tag '$tag' is not a semver version (e.g. 1.2.3, no 'v' prefix)" }
+          $version = (Get-Content -Raw mod_info/x_rls_json_cache/info.json | ConvertFrom-Json).version_string
+          if ($tag -ne $version) { throw "Tag '$tag' does not match version_string '$version' in info.json" }
+
+      - name: Install LuaJIT
+        shell: bash
+        run: sudo apt-get update && sudo apt-get install -y luajit
+
+      - name: Build
+        run: ./build.ps1
+
+      - name: Extract release notes from CHANGELOG.md
+        run: |
+          $tag = $env:GITHUB_REF_NAME
+          $section = (Get-Content -Raw CHANGELOG.md) -split '(?m)^## ' |
+            Where-Object { $_ -match "^$([regex]::Escape($tag))(\s|$)" } | Select-Object -First 1
+          if (-not $section) { throw "CHANGELOG.md has no '## $tag' section" }
+          ($section -split "`n", 2)[1].Trim() | Set-Content -Encoding utf8 release-notes.md
+
+      - name: Create GitHub release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          $tag = $env:GITHUB_REF_NAME
+          $releaseArgs = @($tag, "dist/x_rls_json_cache_$tag.zip", '--title', $tag, '--notes-file', 'release-notes.md')
+          if ($tag.Contains('-')) { $releaseArgs += '--prerelease' }
+          gh release create @releaseArgs
+          if ($LASTEXITCODE -ne 0) { throw 'gh release create failed' }

@@ -24,11 +24,11 @@ $root = $PSScriptRoot
 $modName = 'x_rls_json_cache'
 $includeDirs = @('lua', 'scripts', 'mod_info')
 
-$info = Get-Content -Raw (Join-Path $root "mod_info\$modName\info.json") | ConvertFrom-Json
+$info = Get-Content -Raw (Join-Path $root "mod_info/$modName/info.json") | ConvertFrom-Json
 $version = $info.version_string
 if (-not $version) { throw 'version_string is missing from info.json' }
 
-$luaMain = Join-Path $root 'lua\ge\extensions\xRlsJsonCache.lua'
+$luaMain = Join-Path $root 'lua/ge/extensions/xRlsJsonCache.lua'
 $luaVersion = [regex]::Match((Get-Content -Raw $luaMain), 'M\.version\s*=\s*"([^"]+)"').Groups[1].Value
 if ($luaVersion -ne $version) {
   throw "Version mismatch: info.json says '$version' but xRlsJsonCache.lua says '$luaVersion'"

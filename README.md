@@ -73,6 +73,18 @@ local function t(on) xRlsJsonCache.setEnabled(on); core_vehicles.clearCache(); l
    containing only `lua/`, `scripts/` and `mod_info/`. Add `-Install` to also copy the zip into your BeamNG
    mods folder, replacing older versions.
 
+3. To publish, commit the changes, then tag the commit with the bare version and push the tag:
+
+   ```bash
+   git tag 0.0.2
+   git push origin 0.0.2
+   ```
+
+   `.github/workflows/release.yml` then checks the tag is a semver version (no `v` prefix; pre-releases
+   like `0.1.0-beta.1` are marked as such) that matches `version_string`, builds the zip and creates a
+   GitHub release for it, with the tag's `CHANGELOG.md` section as the release notes. The run fails if
+   the versions differ or the changelog has no `## <version>` heading.
+
 `mod_info/x_rls_json_cache/` uses `x_rls_json_cache` as a placeholder tag. If the mod is published on the BeamNG
 repository, rename that folder to the tag the repository assigns.
 
@@ -83,4 +95,5 @@ lua/ge/extensions/xRlsJsonCache.lua       the cache
 scripts/x_rls_json_cache/modScript.lua    loads it at startup
 mod_info/x_rls_json_cache/info.json       title, version and repository description
 build.ps1                                 packages dist/x_rls_json_cache_<version>.zip
+.github/workflows/release.yml             builds and publishes a release when a version tag is pushed
 ```
