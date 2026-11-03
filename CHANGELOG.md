@@ -12,4 +12,4 @@ First release.
   don't exist.
 - Entries are dropped on `jsonWriteFile`/`writeFile` and `onFileChanged`; the whole cache clears when mods
   are activated or deactivated or files under `/mods/` change.
-- Console: `xRlsCache.stats()`, `xRlsCache.clear()`, `xRlsCache.setEnabled(bool)`.
+- Console: `xRlsJsonCache.stats()`, `xRlsJsonCache.clear()`, `xRlsJsonCache.setEnabled(bool)`.

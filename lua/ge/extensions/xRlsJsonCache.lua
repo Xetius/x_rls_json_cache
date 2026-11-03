@@ -1,5 +1,5 @@
 local M = {}
-local logTag = "xRlsCache"
+local logTag = "xRlsJsonCache"
 
 M.version = "0.0.1"
 
@@ -144,7 +144,7 @@ end
 function M.stats()
   local lookups = stats.hits + stats.nilHits + stats.misses
   local text = string.format(
-    "xRlsCache " .. M.version .. ": %s | %d entries, %.1f MB | hits %d (+%d missing-file hits), misses %d, hit rate %.1f%% | " ..
+    "xRlsJsonCache " .. M.version .. ": %s | %d entries, %.1f MB | hits %d (+%d missing-file hits), misses %d, hit rate %.1f%% | " ..
     "avg hit %.3f ms, avg miss %.3f ms | invalidations %d, clears %d, encode failures %d, passthrough %d",
     enabled and "on" or "off", stats.entries, stats.bytes / 1e6,
     stats.hits, stats.nilHits, stats.misses,
